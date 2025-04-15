@@ -1,3 +1,6 @@
  # input and output folders
  input-files/
  output-files/
+
+ *.xml
+ *.rdf
