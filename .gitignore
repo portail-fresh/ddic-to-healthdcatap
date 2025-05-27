@@ -3,4 +3,5 @@ input-files/
 output-files/
 
 *.xml
+*.ipynb
 *.rdf
