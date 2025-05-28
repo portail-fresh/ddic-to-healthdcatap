@@ -30,9 +30,19 @@
         <xsl:apply-templates select="ddi:stdyDscr/ddi:stdyInfo/ddi:abstract" mode="description"/>
         <xsl:apply-templates select="ddi:stdyDscr/ddi:stdyInfo/ddi:subject/ddi:topcClas" mode="healthTheme"/>
         <xsl:apply-templates select="ddi:stdyDscr/ddi:stdyInfo/ddi:sumDscr/ddi:universe[@level='Type de population']" mode="populationCoverage"/>
+        <xsl:apply-templates select="ddi:stdyDscr/ddi:stdyInfo/ddi:sumDscr/ddi:nation |
+          ddi:stdyDscr/ddi:stdyInfo/ddi:sumDscr/ddi:geogCover |
+          ddi:stdyDscr/ddi:stdyInfo/ddi:sumDscr/ddi:geogUnit"
+          mode="spatial"/>
+        <xsl:apply-templates select="ddi:stdyDscr/ddi:method/ddi:dataColl/ddi:frequenc" mode="frequency"/>
+        <xsl:apply-templates select="ddi:stdyDscr/ddi:stdyInfo/ddi:sumDscr" mode="temporalCoverage"/>
+        
+        
       </dcat:Dataset>
     </rdf:RDF>
   </xsl:template>
+  
+  
 
   <!-- Identifier -->
   <xsl:template match="ddi:IDNo" mode="identifier">
@@ -222,5 +232,55 @@
       <xsl:value-of select="normalize-space(.)"/>
     </health:populationCoverage>
   </xsl:template>
+  
+  <!-- Geographical Coverage -->
+  <xsl:template match="ddi:nation | ddi:geogCover | ddi:geogUnit" mode="spatial">
+    <dct:spatial>
+      <dct:Location>
+        <xsl:if test="@xml:lang">
+          <xsl:attribute name="xml:lang">
+            <xsl:value-of select="@xml:lang"/>
+          </xsl:attribute>
+        </xsl:if>
+        <xsl:value-of select="normalize-space(.)"/>
+      </dct:Location>
+    </dct:spatial>
+  </xsl:template>
+  
+  <!-- Collection Frequency -->
+  <xsl:template match="ddi:frequenc" mode="frequency">
+    <dct:accrualPeriodicity>
+      <dct:Frequency>
+        <xsl:if test="@xml:lang">
+          <xsl:attribute name="xml:lang">
+            <xsl:value-of select="@xml:lang"/>
+          </xsl:attribute>
+        </xsl:if>
+        <xsl:value-of select="normalize-space(.)"/>
+      </dct:Frequency>
+    </dct:accrualPeriodicity>
+  </xsl:template>
+  
+  <!-- Collection Dates -->
+  <xsl:template match="ddi:sumDscr" mode="temporalCoverage">
+    <xsl:if test="ddi:collDate[@event='start'] or ddi:collDate[@event='end']">
+      <dct:temporal>
+        <dct:PeriodOfTime>
+          <xsl:if test="ddi:collDate[@event='start']">
+            <dcat:startDate>
+              <xsl:value-of select="ddi:collDate[@event='start']"/>
+            </dcat:startDate>
+          </xsl:if>
+          <xsl:if test="ddi:collDate[@event='end']">
+            <dcat:endDate>
+              <xsl:value-of select="ddi:collDate[@event='end']"/>
+            </dcat:endDate>
+          </xsl:if>
+        </dct:PeriodOfTime>
+      </dct:temporal>
+    </xsl:if>
+  </xsl:template>
+  
+  
 
 </xsl:stylesheet>
