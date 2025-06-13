@@ -3,5 +3,5 @@ input-files/
 output-files/
 
 *.xml
-*.ipynb
 *.rdf
+ddi_2_5-dcat-ap.xslt
