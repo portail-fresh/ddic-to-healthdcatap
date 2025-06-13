@@ -4,4 +4,5 @@ output-files/
 
 *.xml
 *.rdf
+*.ipynb
 ddi_2_5-dcat-ap.xslt
